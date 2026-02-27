@@ -1,0 +1,35 @@
+# --- SEGURIDAD Y ENTORNO ---
+.env
+.env.*
+!.env.example
+# ¡IMPORTANTE! No subir los certificados generados
+certs/*.pem
+certs/*.key
+
+# --- BASE DE DATOS (SQLite) ---
+*.db
+*.db-wal
+*.db-shm
+data/
+
+# --- BACKEND (C++ / Crow) ---
+build/
+backend/build/
+obj/
+*.o
+*.out
+*.gch
+
+# --- FRONTEND (Svelte / Bun / Node) ---
+node_modules/
+.svelte-kit/
+dist/
+.vercel
+.output
+
+# --- SISTEMA ---
+.DS_Store
+Thumbs.db
+*.log
+# Certificados
+certs/

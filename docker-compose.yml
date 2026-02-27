@@ -1,0 +1,22 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crow-nginx-app
+    ports:
+      - "${PORT_HOST:-443}:443"
+      - "80:80" 
+    volumes:
+      - ./data:/database
+    restart: unless-stopped
+    # Add this section to resolve the warning
+    ulimits:
+      nofile:
+        soft: 4096
+        hard: 4096
+    deploy:
+      resources:
+        limits:
+          memory: 64M 
+          cpus: '1'
