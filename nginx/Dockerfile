@@ -8,7 +8,7 @@ RUN curl -fSL https://nginx.org/download/nginx-1.26.0.tar.gz -o nginx.tar.gz \
 COPY custom/ nginx-1.26.0/src/http/modules/custom
 WORKDIR /src/nginx-1.26.0
 RUN ./configure \
-    --add-module=src/http/modules/custom \
+    #--add-module=src/http/modules/custom \
     --prefix=/etc/nginx \
     --sbin-path=/usr/sbin/nginx \
     --conf-path=/etc/nginx/nginx.conf \
@@ -54,7 +54,7 @@ COPY --from=wasm-build /app/wasm/dist/*.js ./static/
 RUN bun run build
 
 ### ETAPA 4: IMAGEN FINAL
-FROM alpine
+FROM scratch
 COPY --from=nginx-builder /usr/sbin/nginx /usr/sbin/nginx
 COPY --from=nginx-builder /etc/nginx/mime.types /etc/nginx/mime.types
 COPY --from=nginx-builder /rootfs/ / 

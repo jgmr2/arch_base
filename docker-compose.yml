@@ -1,22 +1,47 @@
 services:
   app:
     build:
-      context: .
+      context: ./nginx
       dockerfile: Dockerfile
-    container_name: crow-nginx-app
+    container_name: app
     ports:
       - "${PORT_HOST:-443}:443"
-      - "80:80" 
+      - "80:80"
     volumes:
+      # Montamos el socket en RAM para Nginx
+      - socket_nexus:/var/run/nexus
       - ./data:/database
     restart: unless-stopped
-    # Add this section to resolve the warning
     ulimits:
       nofile:
-        soft: 4096
-        hard: 4096
+        soft: 65535
+        hard: 65535
     deploy:
       resources:
         limits:
           memory: 64M 
-          cpus: '1'
+          cpus: '1.0'
+
+  api_services:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: api
+    restart: unless-stopped
+    volumes:
+      # Montamos el MISMO socket en RAM para Crow
+      - socket_nexus:/var/run/nexus
+    deploy:
+      resources:
+        limits:
+          memory: 32M # Subí a 32M porque Crow (C++) necesita un poco de margen para el stack de hilos
+          cpus: '0.5'
+
+volumes:
+  # Definimos el volumen tipo tmpfs (RAM pura)
+  socket_nexus:
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+      o: "size=8M,mode=1777" # 8MB es más que suficiente para un archivo .sock
