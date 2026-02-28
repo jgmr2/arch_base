@@ -22,7 +22,7 @@ services:
           memory: 64M 
           cpus: '1.0'
 
-  api_services:
+  api:
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -34,8 +34,8 @@ services:
     deploy:
       resources:
         limits:
-          memory: 32M # Subí a 32M porque Crow (C++) necesita un poco de margen para el stack de hilos
-          cpus: '0.5'
+          memory: 32M 
+          cpus: '1'
 
 volumes:
   # Definimos el volumen tipo tmpfs (RAM pura)

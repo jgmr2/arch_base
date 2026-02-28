@@ -1,14 +1,10 @@
 CXX      := g++
 
-# 1. Ajuste de Includes: Quitamos jsoncpp (usaremos nlohmann-json que es header-only)
-# Agregamos los flags de optimización para Beast.
 CXXFLAGS := -std=c++17 -Wall -Wextra -O3 \
             -I/usr/local/include \
             -ffunction-sections -fdata-sections
 
-# 2. LDFLAGS: Eliminamos Drogon, Trantor, c-ares, etc.
-# Solo dejamos lo que Beast necesita para funcionar en Alpine.
-# Nota: En Alpine, Boost suele requerir -lboost_system.
+
 LDFLAGS  := -Wl,--gc-sections -s \
             -static-libstdc++ \
             -static-libgcc \
