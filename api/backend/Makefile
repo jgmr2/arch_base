@@ -13,7 +13,7 @@ INCLUDE_DIRS  := $(shell find $(SRC_DIR) -type d)
 INCLUDE_FLAGS := $(addprefix -I, $(INCLUDE_DIRS))
 
 # Librerías (Orden crítico para enlace estático)
-LIBS := -luv -lsqlite3 -lssl -lcrypto -lz -lpthread -ldl
+LIBS := -luring -luv -lssl -lcrypto -lz -lpthread -ldl
 
 # Archivos de origen (.c)
 SRCS := $(shell find $(SRC_DIR) -name "*.c")
