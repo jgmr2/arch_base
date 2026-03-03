@@ -32,8 +32,8 @@ services:
 
   db:
     build:
-      context: ./data
-      dockerfile: Dockerfile
+      context: .data
+      dockerfile: Dockerfiledb
     container_name: db
     volumes:
       - pg_data:/data
