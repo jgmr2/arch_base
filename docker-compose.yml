@@ -8,7 +8,10 @@ services:
       - "80:80"
     restart: unless-stopped
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    volumes:
+      - dbsocket:/tmp # Acceso al socket compartido
     sysctls:
       - net.core.somaxconn=65535
       - net.ipv4.tcp_tw_reuse=1
@@ -29,20 +32,30 @@ services:
 
   db:
     build:
-      context: ./data  # Apunta a la carpeta donde pusiste el nuevo Dockerfile
+      context: ./data
       dockerfile: Dockerfile
-    container_name: postgres_db
-    # IMPORTANTE: Si es la primera vez, el volumen debe inicializarse.
-    # Como es scratch, si /data está vacío, fallará. 
-    # Se recomienda usar un volumen nombrado para que Docker preserve los datos.
+    container_name: db
     volumes:
       - pg_data:/data
+      - dbsocket:/tmp # Ubicación del socket
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "postgres", "-V"] # Verificación mínima en scratch
-      interval: 10s
-      timeout: 5s
+      # Verificamos que el socket esté creado y responda
+      test: ["CMD", "postgres", "-V"]
+      interval: 5s
+      timeout: 3s
       retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
 
 volumes:
-  pg_data: # Volumen persistente gestionado por Docker
+  pg_data:
+  dbsocket:
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+      o: "size=64m,mode=1777"
