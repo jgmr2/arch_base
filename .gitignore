@@ -10,7 +10,6 @@ certs/*.key
 *.db
 *.db-wal
 *.db-shm
-data/
 
 # --- BACKEND (C++ / Crow) ---
 build/

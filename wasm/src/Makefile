@@ -5,8 +5,7 @@ CC = emcc
 SRC_DIR = .
 OUT_DIR = ../dist
 
-# Configuración limpia (Sin libharu ni dependencias de PDF)
-# EXPORTED_RUNTIME_METHODS: Ideal para pasar arrays de puntos (floats) a WASM.
+
 EM_FLAGS = -O3 \
            --bind \
            -s WASM=1 \
